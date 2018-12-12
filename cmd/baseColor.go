@@ -23,13 +23,10 @@ import (
 // baseColorCmd represents the baseColor command
 var baseColorCmd = &cobra.Command{
 	Use:   "baseColor",
-	Short: "A brief description of your command",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
-
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
+	Short: "Specify the base color.",
+	Long: `A base color from which the entire palette is calculated.
+	
+  Should be specified in FORMAT`,
 	Run: func(cmd *cobra.Command, args []string) {
 		// TODO: Work your own magic here
 		fmt.Println("baseColor called")
