@@ -23,6 +23,7 @@ import (
 )
 
 var cfgFile string
+var Version = "0.1"
 
 // RootCmd represents the base command when called without any subcommands
 var RootCmd = &cobra.Command{
@@ -54,8 +55,6 @@ func init() {
 	// will be global for your application.
 
 	RootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.palegen.yaml)")
-	RootCmd.PersistentFlags().StringVarP(&baseColor, "basecolor", "c", "", "base color e.g. #ffcc00")
-
 	// Cobra also supports local flags, which will only run
 	// when this action is called directly.
 	RootCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")

@@ -16,20 +16,26 @@ package cmd
 
 import (
 	"fmt"
+	"strings"
 
+	"github.com/lucasb-eyer/go-colorful"
 	"github.com/spf13/cobra"
 )
 
 // baseColorCmd represents the baseColor command
 var baseColorCmd = &cobra.Command{
-	Use:   "baseColor",
+	Use:   "baseColor [color]",
 	Short: "Specify the base color.",
 	Long: `A base color from which the entire palette is calculated.
 	
   Should be specified in FORMAT`,
 	Run: func(cmd *cobra.Command, args []string) {
 		// TODO: Work your own magic here
-		fmt.Println("baseColor called")
+
+		c := colorful.HappyColor()
+
+		fmt.Println("Random happy color:" + c)
+		fmt.Println("baseColor called with:" + strings.Join(args, " "))
 	},
 }
 
@@ -45,5 +51,6 @@ func init() {
 	// Cobra supports local flags which will only run when this command
 	// is called directly, e.g.:
 	// baseColorCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
-
+	baseColorCmd.Flags().StringVarP(&baseColor, "basecolor", "c", "", "base color e.g. #ffcc00 (required)")
+	baseColorCmd.MarkFlagRequired("basecolor")
 }
