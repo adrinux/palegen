@@ -18,24 +18,31 @@ import (
 	"fmt"
 	"os"
 
+	colorful "github.com/lucasb-eyer/go-colorful"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
 
 var cfgFile string
-var Version = "0.1"
+var version = "0.1"
 
 // RootCmd represents the base command when called without any subcommands
 var RootCmd = &cobra.Command{
-	Use:   "palegen",
+	Use:   "palegen COLOR",
 	Short: "A CSS color palette generator",
 	Long: `A CSS colour palette generator:
 
-Specify a base color in FORMAT format.
-  baseColor FORMAT`,
+Specify a base color in hexadecimal but without the hash eg. ffcc00.
+  palegen ffcc00`,
 	// Uncomment the following line if your bare application
 	// has an action associated with it:
-	//	Run: func(cmd *cobra.Command, args []string) { },
+	Run: func(cmd *cobra.Command, args []string) {
+
+		bc := colorful.HappyColor()
+
+		fmt.Println("Random happy color:", bc)
+		//fmt.Println("baseColor called with:", strings.Join(args, " "))
+	},
 }
 
 // Execute adds all child commands to the root command sets flags appropriately.
@@ -53,11 +60,11 @@ func init() {
 	// Here you will define your flags and configuration settings.
 	// Cobra supports Persistent Flags, which, if defined here,
 	// will be global for your application.
-
 	RootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.palegen.yaml)")
+
 	// Cobra also supports local flags, which will only run
 	// when this action is called directly.
-	RootCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+	//RootCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }
 
 // initConfig reads in config file and ENV variables if set.
