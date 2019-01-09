@@ -28,21 +28,37 @@ var version = "0.1"
 
 // RootCmd represents the base command when called without any subcommands
 var RootCmd = &cobra.Command{
-	Use:   "palegen COLOR",
+	Use:   "palegen h s l",
 	Short: "A CSS color palette generator",
 	Long: `A CSS colour palette generator:
 
-Specify a base color in hexadecimal but without the hash eg. ffcc00.
+Specify a base color in hexadecimal  eg. ffcc00
   palegen ffcc00`,
 	// Uncomment the following line if your bare application
 	// has an action associated with it:
 	Run: func(cmd *cobra.Command, args []string) {
 
-		bc := colorful.HappyColor()
+		ic := "#" + args[0]
 
-		fmt.Println("Random happy color:", bc)
-		//fmt.Println("baseColor called with:", strings.Join(args, " "))
+		// hc = color input as colorful.color
+		hc, _ := colorful.Hex(ic)
+
+		// bc = colorful.color converted to hcl space (hue, chroma, lightness)
+		h, c, l := hc.Hcl()
+
+		fmt.Println("Input color:", ic)
+		fmt.Printf("bc type is: %T \n", hc)
+		fmt.Println("coloful.color:", hc)
+		fmt.Println("Converted to HCL space:", h, c, l)
 	},
+}
+
+func generateHues() {
+	// rotate the hue value around the full 360 degress with 12 steps
+	// r := 360/12
+	// for i = 0 to 12, i++
+	// newHue = h +(i * r)
+	// need these in some sort of array (slice or map?)
 }
 
 // Execute adds all child commands to the root command sets flags appropriately.
