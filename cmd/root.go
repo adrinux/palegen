@@ -38,7 +38,6 @@ Specify a base color in hexadecimal  eg. ffcc00
 	// has an action associated with it:
 	Run: func(cmd *cobra.Command, args []string) {
 
-		// Convert this with strconv.ParseInt?
 		ic := "#" + args[0]
 
 		// hc = color input as colorful.color
