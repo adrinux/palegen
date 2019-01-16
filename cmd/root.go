@@ -47,18 +47,20 @@ Specify a base color in hexadecimal  eg. ffcc00
 		h, c, l := hc.Hcl()
 
 		fmt.Println("Input color:", ic)
-		fmt.Printf("bc type is: %T \n", hc)
-		fmt.Println("coloful.color:", hc)
 		fmt.Println("Converted to HCL space:", h, c, l)
-	},
-}
 
-func generateHues() {
-	// rotate the hue value around the full 360 degress with 12 steps
-	// r := 360/12
-	// for i = 0 to 12, i++
-	// newHue = h +(i * r)
-	// need these in some sort of array (slice or map?)
+		// generate hues
+		// rotate the hue value around the full 360 degress with 12 steps
+		steps := 12
+		size := float64(360 / steps)
+
+		for i := 0; i < steps; i++ {
+			h = h + size
+			fmt.Printf("hcl is: %v %v %v\n", h, c, l)
+		}
+
+		// need these in a map
+	},
 }
 
 // Execute adds all child commands to the root command sets flags appropriately.
