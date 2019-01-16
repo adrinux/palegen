@@ -14,8 +14,35 @@
 
 package main
 
-import "github.com/adrinux/palegen/cmd"
+import (
+	"fmt"
+	"os"
+
+	colorful "github.com/lucasb-eyer/go-colorful"
+)
 
 func main() {
-	cmd.Execute()
+	// ic = input color as CSS style hexadecimal triplet
+	ic := "#" + os.Args[1]
+
+	// hc = convert input to colorful.color
+	hc, _ := colorful.Hex(ic)
+
+	// colorful.color converted to hcl space (hue, chroma, lightness)
+	h, c, l := hc.Hcl()
+
+	fmt.Println("Input color:", ic)
+	fmt.Println("Converted to HCL space:", h, c, l)
+
+	// generate hues
+	// rotate the hue value around the full 360 degress with 12 steps
+	steps := 12
+	size := float64(360 / steps)
+
+	for i := 0; i < steps; i++ {
+		h = h + size
+		fmt.Printf("hcl is: %v %v %v\n", h, c, l)
+	}
+
+	// need these in a map
 }
