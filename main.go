@@ -38,8 +38,23 @@ var (
 		"violet":  270,
 		"fuschia": 300,
 		"pink":    330,
-		"grey":    360, // desaturate input to create a grey
 	}
+	clrs map[string]colorful.Color
+	// {
+	// 	"red":     {0.0 1.0 0.5},
+	// 	"orange":  {0.0 1.0 0.5},
+	// 	"yellow":  {0.0 1.0 0.5},
+	// 	"lime":    {0.0 1.2 0.5},
+	// 	"green":   {0.0 1.2 0.5},
+	// 	"teal":    {0.0 1.2 0.5},
+	// 	"cyan":    {0.0 1.2 0.5},
+	// 	"blue":    {0.0 1.2 0.5},
+	// 	"indigo":  {0.0 1.2 0.5},
+	// 	"violet":  {0.0 1.2 0.5},
+	// 	"fuschia": {0.0 1.2 0.5},
+	// 	"pink":    {0.0 1.2 0.5},
+	// 	"grey":    {0.0 1.2 0.5}, // desaturate input to create a grey
+	// }
 )
 
 func main() {
@@ -55,11 +70,15 @@ func main() {
 	fmt.Println("Input color:", ic)
 	fmt.Println("Converted to HCL space:", h, c, l)
 
-	genHues(h, c, l)
+	genHues(h)
+	fmt.Println("hues map:", hues)
+
+	genClrs(hues, c, l)
+	fmt.Println("Colours map:", clrs)
 
 }
 
-func genHues(h, c, l float64) {
+func genHues(h float64) {
 	// generate hues
 	// rotate the hue value around the full 360 degress with 12 steps
 	steps := 12
@@ -75,14 +94,57 @@ func genHues(h, c, l float64) {
 
 		switch {
 		case h >= 0 && h <= 30:
-			// add to the hues map for the red key
-			fmt.Println("Assigned to: red")
+			// add h to the hues map for the red key
+			hues["red"] = h
+			//fmt.Println("Assigned to: red")
 		case h > 30 && h <= 60:
-			// add to the hues map for the red key
-			fmt.Println("Assigned to: orange")
+			hues["orange"] = h
+			//fmt.Println("Assigned to: orange")
+		case h > 60 && h <= 90:
+			hues["yellow"] = h
+			//fmt.Println("Assigned to: yellow")
+		case h > 90 && h <= 120:
+			hues["lime"] = h
+			//fmt.Println("Assigned to: lime")
+		case h > 120 && h <= 150:
+			hues["green"] = h
+			//fmt.Println("Assigned to: green")
+		case h > 150 && h <= 180:
+			hues["teal"] = h
+			//fmt.Println("Assigned to: teal")
+		case h > 180 && h <= 210:
+			hues["cyan"] = h
+			//fmt.Println("Assigned to: cyan")
+		case h > 210 && h <= 240:
+			hues["blue"] = h
+			//fmt.Println("Assigned to: blue")
+		case h > 240 && h <= 270:
+			hues["indigo"] = h
+			//fmt.Println("Assigned to: indigo")
+		case h > 270 && h <= 300:
+			hues["violet"] = h
+			//fmt.Println("Assigned to: violet")
+		case h > 300 && h <= 330:
+			hues["fuschia"] = h
+			//fmt.Println("Assigned to: fuschia")
+		case h > 330 && h <= 360:
+			hues["pink"] = h
+			//fmt.Println("Assigned to: pink")
 		}
-
 	}
+}
 
-	// need these in a map
+func genClrs(hues map[string]float64, c float64, l float64) map[string]colorful.Color {
+
+	clrs = make(map[string]colorful.Color)
+
+	// range of hues map converting h back to color in hcl space
+	for k, v := range hues {
+		// get value h from hues create a colorful.Colour with it
+		colr := colorful.Hcl(v, c, l)
+		// add to clrs with key
+		clrs[k] = colr
+		fmt.Println("key:", k, "/ value:", colr)
+	}
+	return clrs
 }
