@@ -21,6 +21,14 @@ import (
 	colorful "github.com/lucasb-eyer/go-colorful"
 )
 
+// named color in hcl space
+type ncol struct {
+	name string
+	hue float64
+	chroma float64
+	lightness float64
+}
+
 var (
 	h    float64
 	c    float64
