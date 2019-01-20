@@ -22,10 +22,10 @@ import (
 )
 
 // named color in hcl space
-type ncol struct {
-	name string
-	hue float64
-	chroma float64
+type nc struct {
+	name      string
+	hue       float64
+	chroma    float64
 	lightness float64
 }
 
@@ -47,7 +47,7 @@ var (
 		"fuschia": 300,
 		"pink":    330,
 	}
-	clrs []string, h float64, c float64, l float64
+	clrs []nc
 	// {
 	// 	"red":     {0.0 1.0 0.5},
 	// 	"orange":  {0.0 1.0 0.5},
@@ -66,7 +66,6 @@ var (
 )
 
 // TODO ++++++++
-// Create a declaration struct to hold colour name + h,c,l values
 // convert genClrs to use a slice of structs
 // output colours from the slice of structs
 
