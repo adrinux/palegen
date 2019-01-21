@@ -23,50 +23,38 @@ import (
 
 // named color in hcl space
 type nc struct {
-	name      string
-	hue       float64
-	chroma    float64
-	lightness float64
+	name string
+	hu   float64
+	ch   float64
+	li   float64
 }
 
 var (
-	h    float64
-	c    float64
-	l    float64
-	hues = map[string]float64{
-		"red":     0, // and 360
-		"orange":  30,
-		"yellow":  60,
-		"lime":    90,
-		"green":   120,
-		"teal":    150,
-		"cyan":    180,
-		"blue":    210,
-		"indigo":  240,
-		"violet":  270,
-		"fuschia": 300,
-		"pink":    330,
-	}
-	clrs []nc
-	// {
-	// 	"red":     {0.0 1.0 0.5},
-	// 	"orange":  {0.0 1.0 0.5},
-	// 	"yellow":  {0.0 1.0 0.5},
-	// 	"lime":    {0.0 1.2 0.5},
-	// 	"green":   {0.0 1.2 0.5},
-	// 	"teal":    {0.0 1.2 0.5},
-	// 	"cyan":    {0.0 1.2 0.5},
-	// 	"blue":    {0.0 1.2 0.5},
-	// 	"indigo":  {0.0 1.2 0.5},
-	// 	"violet":  {0.0 1.2 0.5},
-	// 	"fuschia": {0.0 1.2 0.5},
-	// 	"pink":    {0.0 1.2 0.5},
-	// 	"grey":    {0.0 1.2 0.5}, // desaturate input to create a grey
+	h float64
+	c float64
+	l float64
+
+	// hues = map[string]float64{
+	// 	"red":     0, // and 360
+	// 	"orange":  30,
+	// 	"yellow":  60,
+	// 	"lime":    90,
+	// 	"green":   120,
+	// 	"teal":    150,
+	// 	"cyan":    180,
+	// 	"blue":    210,
+	// 	"indigo":  240,
+	// 	"violet":  270,
+	// 	"fuschia": 300,
+	// 	"pink":    330,
 	// }
 )
 
 // TODO ++++++++
-// convert genClrs to use a slice of structs
+// convert genHues to use a slice of structs
+// add generated hue value to respective struct
+// pass c to ch and l to li in struct
+//    except for grey (seperate function for grey?)
 // output colours from the slice of structs
 
 func main() {
@@ -82,10 +70,10 @@ func main() {
 	fmt.Println("Input color:", ic)
 	//fmt.Println("Converted to HCL space:", h, c, l)
 
-	genHues(h)
+	rotateHue(h)
 	//fmt.Println("hues map:", hues)
 
-	genClrs(hues, h, c, l)
+	//genClrs(hues, []clrs)
 	//fmt.Println("Colours map:", clrs)
 
 	// TODO generate shades and tints from hues
@@ -109,10 +97,10 @@ func main() {
 	}
 
 	// convert clrs to output
-	for k, v := range clrs {
-		c := colorful.Hcl(v)
-		fmt.Fprintf(f, "  --%v: %v;\n", k, c.Hex())
-	}
+	// for k, v := range clrs {
+	// 	c := colorful.Hcl(v)
+	// 	fmt.Fprintf(f, "  --%v: %v;\n", k, c.Hex())
+	// }
 	// n3, err := fmt.Fprintf(f, "\n/* Color map here */\n")
 	// if err != nil {
 	// 	fmt.Printf("Error: %v", err)
@@ -129,8 +117,25 @@ func main() {
 
 }
 
-func genHues(h float64) {
-	// generate hues
+func rotateHue(h float64, c float64, l float64) []nc {
+
+	// define a slice of structs containig main colors
+	clrs := []nc{
+		{"red", 0.0, 1.0, 0.5},
+		{"orange", 0.0, 1.0, 0.5},
+		{"yellow", 0.0, 1.0, 0.5},
+		{"lime", 0.0, 1.0, 0.5},
+		{"green", 0.0, 1.0, 0.5},
+		{"teal", 0.0, 1.0, 0.5},
+		{"cyan", 0.0, 1.0, 0.5},
+		{"blue", 0.0, 1.0, 0.5},
+		{"indigo", 0.0, 1.0, 0.5},
+		{"violet", 0.0, 1.0, 0.5},
+		{"fuschia", 0.0, 1.0, 0.5},
+		{"pink", 0.0, 1.0, 0.5},
+		{"grey", 0.0, 1.0, 0.5},
+	}
+
 	// rotate the hue value around the full 360 degress with 12 steps
 	steps := 12
 	size := float64(360 / steps)
@@ -145,8 +150,9 @@ func genHues(h float64) {
 
 		switch {
 		case h >= 0 && h <= 30:
-			// add h to the hues map for the red key
-			hues["red"] = h
+			if []clrs.name == "red" {
+				clrs.hu = h
+			}
 			//fmt.Println("Assigned to: red")
 		case h > 30 && h <= 60:
 			hues["orange"] = h
@@ -185,21 +191,19 @@ func genHues(h float64) {
 	}
 }
 
-func genClrs(hues map[string]float64, h float64, c float64, l float64) map[string]colorful.Color {
+// func genClrs(hues map[string]float64, clrs) []clrs {
 
-	clrs = make(map[string]colorful.Color)
+// 	// range of hues map converting h back to color in hcl space
+// 	for k, v := range hues {
+// 		// get value h from hues create a colorful.Colour with it
+// 		colr := colorful.Hcl(v, c, l)
+// 		// add to clrs with key
+// 		clrs[k] = colr
+// 		fmt.Println("key:", k, "/ value:", colr)
+// 	}
 
-	// range of hues map converting h back to color in hcl space
-	for k, v := range hues {
-		// get value h from hues create a colorful.Colour with it
-		colr := colorful.Hcl(v, c, l)
-		// add to clrs with key
-		clrs[k] = colr
-		fmt.Println("key:", k, "/ value:", colr)
-	}
+// 	n := 0.0
+// 	clrs["grey"] = colorful.Hcl(h, n, l)
 
-	n := 0.0
-	clrs["grey"] = colorful.Hcl(h, n, l)
-
-	return clrs
-}
+// 	return clrs
+// }
