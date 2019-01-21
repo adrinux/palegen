@@ -34,20 +34,22 @@ var (
 	c float64
 	l float64
 
-	// hues = map[string]float64{
-	// 	"red":     0, // and 360
-	// 	"orange":  30,
-	// 	"yellow":  60,
-	// 	"lime":    90,
-	// 	"green":   120,
-	// 	"teal":    150,
-	// 	"cyan":    180,
-	// 	"blue":    210,
-	// 	"indigo":  240,
-	// 	"violet":  270,
-	// 	"fuschia": 300,
-	// 	"pink":    330,
-	// }
+	// define a slice of structs containig main colors
+	clrs = []nc{
+		{"red", 0.0, 1.0, 0.5},
+		{"orange", 0.0, 1.0, 0.5},
+		{"yellow", 0.0, 1.0, 0.5},
+		{"lime", 0.0, 1.0, 0.5},
+		{"green", 0.0, 1.0, 0.5},
+		{"teal", 0.0, 1.0, 0.5},
+		{"cyan", 0.0, 1.0, 0.5},
+		{"blue", 0.0, 1.0, 0.5},
+		{"indigo", 0.0, 1.0, 0.5},
+		{"violet", 0.0, 1.0, 0.5},
+		{"fuschia", 0.0, 1.0, 0.5},
+		{"pink", 0.0, 1.0, 0.5},
+		{"grey", 0.0, 1.0, 0.5},
+	}
 )
 
 // TODO ++++++++
@@ -70,15 +72,13 @@ func main() {
 	fmt.Println("Input color:", ic)
 	//fmt.Println("Converted to HCL space:", h, c, l)
 
-	rotateHue(h)
-	//fmt.Println("hues map:", hues)
-
-	//genClrs(hues, []clrs)
-	//fmt.Println("Colours map:", clrs)
+	rotateHue(h, c, l)
+	// Print returned slice
+	fmt.Println("clrs slice of structs:", clrs)
 
 	// TODO generate shades and tints from hues
 
-	// output file with clrs as css vars
+	// Output file with clrs as css vars
 	// Open file for writing
 	f, err := os.Create("colors.css")
 	if err != nil {
@@ -119,23 +119,6 @@ func main() {
 
 func rotateHue(h float64, c float64, l float64) []nc {
 
-	// define a slice of structs containig main colors
-	clrs := []nc{
-		{"red", 0.0, 1.0, 0.5},
-		{"orange", 0.0, 1.0, 0.5},
-		{"yellow", 0.0, 1.0, 0.5},
-		{"lime", 0.0, 1.0, 0.5},
-		{"green", 0.0, 1.0, 0.5},
-		{"teal", 0.0, 1.0, 0.5},
-		{"cyan", 0.0, 1.0, 0.5},
-		{"blue", 0.0, 1.0, 0.5},
-		{"indigo", 0.0, 1.0, 0.5},
-		{"violet", 0.0, 1.0, 0.5},
-		{"fuschia", 0.0, 1.0, 0.5},
-		{"pink", 0.0, 1.0, 0.5},
-		{"grey", 0.0, 1.0, 0.5},
-	}
-
 	// rotate the hue value around the full 360 degress with 12 steps
 	steps := 12
 	size := float64(360 / steps)
@@ -146,61 +129,111 @@ func rotateHue(h float64, c float64, l float64) []nc {
 		} else if (h + size) > 360 {
 			h = (h + size) - 360
 		}
-		fmt.Printf("h is: %v \n", h)
+		//fmt.Printf("h is: %v \n", h)
 
 		switch {
 		case h >= 0 && h <= 30:
-			if []clrs.name == "red" {
-				clrs.hu = h
+			for i := range clrs {
+				if clrs[i].name == "red" {
+					clrs[i].hu = h
+					clrs[i].ch = c
+					clrs[i].li = l
+				}
 			}
-			//fmt.Println("Assigned to: red")
 		case h > 30 && h <= 60:
-			hues["orange"] = h
-			//fmt.Println("Assigned to: orange")
+			for i := range clrs {
+				if clrs[i].name == "orange" {
+					clrs[i].hu = h
+					clrs[i].ch = c
+					clrs[i].li = l
+				}
+			}
 		case h > 60 && h <= 90:
-			hues["yellow"] = h
-			//fmt.Println("Assigned to: yellow")
+			for i := range clrs {
+				if clrs[i].name == "yellow" {
+					clrs[i].hu = h
+					clrs[i].ch = c
+					clrs[i].li = l
+				}
+			}
 		case h > 90 && h <= 120:
-			hues["lime"] = h
-			//fmt.Println("Assigned to: lime")
+			for i := range clrs {
+				if clrs[i].name == "lime" {
+					clrs[i].hu = h
+					clrs[i].ch = c
+					clrs[i].li = l
+				}
+			}
 		case h > 120 && h <= 150:
-			hues["green"] = h
-			//fmt.Println("Assigned to: green")
+			for i := range clrs {
+				if clrs[i].name == "green" {
+					clrs[i].hu = h
+					clrs[i].ch = c
+					clrs[i].li = l
+				}
+			}
 		case h > 150 && h <= 180:
-			hues["teal"] = h
-			//fmt.Println("Assigned to: teal")
+			for i := range clrs {
+				if clrs[i].name == "teal" {
+					clrs[i].hu = h
+					clrs[i].ch = c
+					clrs[i].li = l
+				}
+			}
 		case h > 180 && h <= 210:
-			hues["cyan"] = h
-			//fmt.Println("Assigned to: cyan")
+			for i := range clrs {
+				if clrs[i].name == "cyan" {
+					clrs[i].hu = h
+					clrs[i].ch = c
+					clrs[i].li = l
+				}
+			}
 		case h > 210 && h <= 240:
-			hues["blue"] = h
-			//fmt.Println("Assigned to: blue")
+			for i := range clrs {
+				if clrs[i].name == "blue" {
+					clrs[i].hu = h
+					clrs[i].ch = c
+					clrs[i].li = l
+				}
+			}
 		case h > 240 && h <= 270:
-			hues["indigo"] = h
-			//fmt.Println("Assigned to: indigo")
+			for i := range clrs {
+				if clrs[i].name == "indigo" {
+					clrs[i].hu = h
+					clrs[i].ch = c
+					clrs[i].li = l
+				}
+			}
 		case h > 270 && h <= 300:
-			hues["violet"] = h
-			//fmt.Println("Assigned to: violet")
+			for i := range clrs {
+				if clrs[i].name == "violet" {
+					clrs[i].hu = h
+					clrs[i].ch = c
+					clrs[i].li = l
+				}
+			}
 		case h > 300 && h <= 330:
-			hues["fuschia"] = h
-			//fmt.Println("Assigned to: fuschia")
+			for i := range clrs {
+				if clrs[i].name == "fuschia" {
+					clrs[i].hu = h
+					clrs[i].ch = c
+					clrs[i].li = l
+				}
+			}
 		case h > 330 && h <= 360:
-			hues["pink"] = h
-			//fmt.Println("Assigned to: pink")
+			for i := range clrs {
+				if clrs[i].name == "pink" {
+					clrs[i].hu = h
+					clrs[i].ch = c
+					clrs[i].li = l
+				}
+			}
 		}
 	}
+	return clrs
 }
 
-// func genClrs(hues map[string]float64, clrs) []clrs {
-
-// 	// range of hues map converting h back to color in hcl space
-// 	for k, v := range hues {
-// 		// get value h from hues create a colorful.Colour with it
-// 		colr := colorful.Hcl(v, c, l)
-// 		// add to clrs with key
-// 		clrs[k] = colr
-// 		fmt.Println("key:", k, "/ value:", colr)
-// 	}
+// func genGrey(h float64, c float64, l float64) []nc {
 
 // 	n := 0.0
 // 	clrs["grey"] = colorful.Hcl(h, n, l)
