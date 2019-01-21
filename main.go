@@ -74,7 +74,7 @@ func main() {
 
 	rotateHue(h, c, l)
 	// Print returned slice
-	fmt.Println("clrs slice of structs:", clrs)
+	//fmt.Println("clrs slice of structs:", clrs)
 
 	// TODO generate shades and tints from hues
 
@@ -96,17 +96,21 @@ func main() {
 		fmt.Print("Wrote bytes:", n1)
 	}
 
-	// convert clrs to output
-	// for k, v := range clrs {
-	// 	c := colorful.Hcl(v)
-	// 	fmt.Fprintf(f, "  --%v: %v;\n", k, c.Hex())
-	// }
-	// n3, err := fmt.Fprintf(f, "\n/* Color map here */\n")
-	// if err != nil {
-	// 	fmt.Printf("Error: %v", err)
-	// } else {
-	// 	fmt.Print("Wrote bytes:", n3)
-	// }
+	// convert clrs to CSS output
+	for i := range clrs {
+		cv := colorful.Hcl(clrs[i].hu, clrs[i].ch, clrs[i].li)
+		//fmt.Fprintf(f, "/* %v */\n", cv)
+		r, g, b := cv.Clamped().RGB255()
+		fmt.Fprintf(f, "  --%s: (%d, %d, %d);\n", clrs[i].name, r, g, b)
+		hex := cv.Clamped().Hex()
+		fmt.Fprintf(f, "  --%s1: %v;\n", clrs[i].name, hex)
+	}
+	n3, err := fmt.Fprintf(f, "\n")
+	if err != nil {
+		fmt.Printf("Error: %v", err)
+	} else {
+		fmt.Print("Wrote bytes:", n3)
+	}
 
 	n6, err := f.WriteString("\n}")
 	if err != nil {

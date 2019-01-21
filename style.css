@@ -1,0 +1,22 @@
+
+body {background-color: #ccc;}
+
+.container {
+    width: 80%;
+}
+
+.cell {
+    height: 50px;
+    width: 200px;
+}
+
+.red { background-color: var(--red); }
+.red1 { background-color: var(--red1); }
+.orange { background-color: var(--orange); }
+.orange1 { background-color: var(--orange1); }
+.yellow { background-color: var(--yellow); }
+.yellow1 { background-color: var(--yellow1); }
+.lime { background-color: var(--lime); }
+.lime1 { background-color: var(--lime1); }
+.green { background-color: var(--green); }
+.green1 { background-color: var(--green1); }
