@@ -1,22 +1,45 @@
 
-body {background-color: #ccc;}
+body {background-color: #ddd;}
 
 .container {
-    width: 80%;
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    grid-template-rows: auto;
 }
 
 .cell {
-    height: 50px;
-    width: 200px;
+    margin-bottom: 50px;
+    
 }
 
-.red { background-color: var(--red); }
-.red1 { background-color: var(--red1); }
-.orange { background-color: var(--orange); }
-.orange1 { background-color: var(--orange1); }
-.yellow { background-color: var(--yellow); }
-.yellow1 { background-color: var(--yellow1); }
-.lime { background-color: var(--lime); }
-.lime1 { background-color: var(--lime1); }
-.green { background-color: var(--green); }
-.green1 { background-color: var(--green1); }
+.cell div {
+    height: 50px;
+    width: 180px;
+}
+
+.red div { background-color: var(--red); }
+.red1 div { background-color: var(--red1); }
+.orange div { background-color: var(--orange); }
+.orange1 div { background-color: var(--orange1); }
+.yellow div { background-color: var(--yellow); }
+.yellow1 div { background-color: var(--yellow1); }
+.lime div { background-color: var(--lime); }
+.lime1 div { background-color: var(--lime1); }
+.green div { background-color: var(--green); }
+.green1 div { background-color: var(--green1); }
+.teal div { background-color: var(--teal); }
+.teal1 div { background-color: var(--teal1); }
+.cyan div { background-color: var(--cyan); }
+.cyan1 div { background-color: var(--cyan1); }
+.blue div { background-color: var(--blue); }
+.blue1 div { background-color: var(--blue1); }
+.indigo div { background-color: var(--indigo); }
+.indigo1 div { background-color: var(--indigo1); }
+.violet div { background-color: var(--violet); }
+.violet1 div { background-color: var(--violet1); }
+.fuschia div { background-color: var(--fuschia); }
+.fuschia1 div { background-color: var(--fuschia1); }
+.pink div { background-color: var(--pink); }
+.pink1 div { background-color: var(--pink1); }
+.grey div { background-color: var(--grey); }
+.grey1 div { background-color: var(--grey1); }

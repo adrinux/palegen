@@ -76,6 +76,9 @@ func main() {
 	// Print returned slice
 	//fmt.Println("clrs slice of structs:", clrs)
 
+	// TODO add grey to clrs
+	// TODO add original brand color to clrs
+	// TODO fix rgb generation
 	// TODO generate shades and tints from hues
 
 	// Output file with clrs as css vars
