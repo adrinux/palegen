@@ -35,8 +35,25 @@ var (
 	c float64
 	l float64
 
+	hueNames = map[string]float64{
+		"red":     0, // and 360
+		"orange":  30,
+		"yellow":  60,
+		"lime":    90,
+		"green":   120,
+		"teal":    150,
+		"cyan":    180,
+		"blue":    210,
+		"indigo":  240,
+		"violet":  270,
+		"fuschia": 300,
+		"pink":    330,
+		//"red":     360,
+	}
+
 	// define a slice of structs containig main colors
 	clrs = []nc{
+		{"base", 0.0, 1.0, 0.5},
 		{"red", 0.0, 1.0, 0.5},
 		{"orange", 0.0, 1.0, 0.5},
 		{"yellow", 0.0, 1.0, 0.5},
