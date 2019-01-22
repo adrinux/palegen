@@ -3,6 +3,7 @@ body {background-color: #fff;}
 
 .container {
     padding: 100px 12px;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
 }
 
 .cells {
@@ -15,15 +16,17 @@ body {background-color: #fff;}
 .cells > div {
     margin-bottom: 20px;
     width: calc(100/13%);
-    font-size: 14px;
+    font-size: 12px;
     text-align: center;
+    text-transform: capitalize;
 }
 
 .cells > div > div {
-    height: 20px;
+    height: 16px;
     width: 100%;
 }
 
+.base div { background-color: var(--base);}
 .red div { background-color: var(--red); }
 .orange div { background-color: var(--orange); }
 .yellow div { background-color: var(--yellow); }
