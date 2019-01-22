@@ -79,7 +79,7 @@ func main() {
 
 	// TODO add grey to clrs
 	// TODO add original brand color to clrs
-	// TODO fix hue generation to match Palx
+	// TODO fix hue generation to match Palx (use hsl not hcl, check chroma.js)
 	// TODO fix hue naming (seem to be one step too far)
 	// TODO generate shades and tints from hues
 
@@ -130,24 +130,19 @@ func rotateHue(h float64, c float64, l float64) []nc {
 
 	// rotate the hue value around the full 360 degress with 12 steps
 	steps := 12
-	size := float64(360 / steps)
+	hueStep := float64(360 / steps)
 
 	for i := 0; i < steps; i++ {
-		if (h + size) <= 360 {
-			h = h + size
-		} else if (h + size) > 360 {
-			h = (h + size) - 360
-		}
-		//fmt.Printf("h is: %v \n", h)
 
-		// massage to nearest integer
-		h = math.Floor(h)
+		h := math.Mod(((float64(i) * hueStep) + h), 360)
+
+		fmt.Printf("h is: %v\n", h)
 
 		switch {
 		case h >= 0 && h <= 30:
 			for i := range clrs {
 				if clrs[i].name == "red" {
-					clrs[i].hu = h
+					clrs[i].hu = math.Floor(h)
 					clrs[i].ch = c
 					clrs[i].li = l
 				}
@@ -155,7 +150,7 @@ func rotateHue(h float64, c float64, l float64) []nc {
 		case h > 30 && h <= 60:
 			for i := range clrs {
 				if clrs[i].name == "orange" {
-					clrs[i].hu = h
+					clrs[i].hu = math.Floor(h)
 					clrs[i].ch = c
 					clrs[i].li = l
 				}
@@ -163,7 +158,7 @@ func rotateHue(h float64, c float64, l float64) []nc {
 		case h > 60 && h <= 90:
 			for i := range clrs {
 				if clrs[i].name == "yellow" {
-					clrs[i].hu = h
+					clrs[i].hu = math.Floor(h)
 					clrs[i].ch = c
 					clrs[i].li = l
 				}
@@ -171,7 +166,7 @@ func rotateHue(h float64, c float64, l float64) []nc {
 		case h > 90 && h <= 120:
 			for i := range clrs {
 				if clrs[i].name == "lime" {
-					clrs[i].hu = h
+					clrs[i].hu = math.Floor(h)
 					clrs[i].ch = c
 					clrs[i].li = l
 				}
@@ -179,7 +174,7 @@ func rotateHue(h float64, c float64, l float64) []nc {
 		case h > 120 && h <= 150:
 			for i := range clrs {
 				if clrs[i].name == "green" {
-					clrs[i].hu = h
+					clrs[i].hu = math.Floor(h)
 					clrs[i].ch = c
 					clrs[i].li = l
 				}
@@ -187,7 +182,7 @@ func rotateHue(h float64, c float64, l float64) []nc {
 		case h > 150 && h <= 180:
 			for i := range clrs {
 				if clrs[i].name == "teal" {
-					clrs[i].hu = h
+					clrs[i].hu = math.Floor(h)
 					clrs[i].ch = c
 					clrs[i].li = l
 				}
@@ -195,7 +190,7 @@ func rotateHue(h float64, c float64, l float64) []nc {
 		case h > 180 && h <= 210:
 			for i := range clrs {
 				if clrs[i].name == "cyan" {
-					clrs[i].hu = h
+					clrs[i].hu = math.Floor(h)
 					clrs[i].ch = c
 					clrs[i].li = l
 				}
@@ -203,7 +198,7 @@ func rotateHue(h float64, c float64, l float64) []nc {
 		case h > 210 && h <= 240:
 			for i := range clrs {
 				if clrs[i].name == "blue" {
-					clrs[i].hu = h
+					clrs[i].hu = math.Floor(h)
 					clrs[i].ch = c
 					clrs[i].li = l
 				}
@@ -211,7 +206,7 @@ func rotateHue(h float64, c float64, l float64) []nc {
 		case h > 240 && h <= 270:
 			for i := range clrs {
 				if clrs[i].name == "indigo" {
-					clrs[i].hu = h
+					clrs[i].hu = math.Floor(h)
 					clrs[i].ch = c
 					clrs[i].li = l
 				}
@@ -219,7 +214,7 @@ func rotateHue(h float64, c float64, l float64) []nc {
 		case h > 270 && h <= 300:
 			for i := range clrs {
 				if clrs[i].name == "violet" {
-					clrs[i].hu = h
+					clrs[i].hu = math.Floor(h)
 					clrs[i].ch = c
 					clrs[i].li = l
 				}
@@ -227,7 +222,7 @@ func rotateHue(h float64, c float64, l float64) []nc {
 		case h > 300 && h <= 330:
 			for i := range clrs {
 				if clrs[i].name == "fuschia" {
-					clrs[i].hu = h
+					clrs[i].hu = math.Floor(h)
 					clrs[i].ch = c
 					clrs[i].li = l
 				}
@@ -235,7 +230,7 @@ func rotateHue(h float64, c float64, l float64) []nc {
 		case h > 330 && h <= 360:
 			for i := range clrs {
 				if clrs[i].name == "pink" {
-					clrs[i].hu = h
+					clrs[i].hu = math.Floor(h)
 					clrs[i].ch = c
 					clrs[i].li = l
 				}
