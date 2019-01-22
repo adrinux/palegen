@@ -16,6 +16,7 @@ package main
 
 import (
 	"fmt"
+	"math"
 	"os"
 
 	colorful "github.com/lucasb-eyer/go-colorful"
@@ -78,7 +79,8 @@ func main() {
 
 	// TODO add grey to clrs
 	// TODO add original brand color to clrs
-	// TODO fix rgb generation
+	// TODO fix hue generation to match Palx
+	// TODO fix hue naming (seem to be one step too far)
 	// TODO generate shades and tints from hues
 
 	// Output file with clrs as css vars
@@ -104,9 +106,9 @@ func main() {
 		cv := colorful.Hcl(clrs[i].hu, clrs[i].ch, clrs[i].li)
 		//fmt.Fprintf(f, "/* %v */\n", cv)
 		r, g, b := cv.Clamped().RGB255()
-		fmt.Fprintf(f, "  --%s: (%d, %d, %d);\n", clrs[i].name, r, g, b)
-		hex := cv.Clamped().Hex()
-		fmt.Fprintf(f, "  --%s1: %v;\n", clrs[i].name, hex)
+		fmt.Fprintf(f, "  --%s: rgb(%d, %d, %d);\n", clrs[i].name, r, g, b)
+		//hex := cv.Clamped().Hex()
+		//fmt.Fprintf(f, "  --%s1: %v;\n", clrs[i].name, hex)
 	}
 	n3, err := fmt.Fprintf(f, "\n")
 	if err != nil {
@@ -137,6 +139,9 @@ func rotateHue(h float64, c float64, l float64) []nc {
 			h = (h + size) - 360
 		}
 		//fmt.Printf("h is: %v \n", h)
+
+		// massage to nearest integer
+		h = math.Floor(h)
 
 		switch {
 		case h >= 0 && h <= 30:
