@@ -18,11 +18,12 @@ import (
 	"fmt"
 	"math"
 	"os"
+	"strconv"
 
 	colorful "github.com/lucasb-eyer/go-colorful"
 )
 
-// named color in hcl space
+// named color in hsl space
 type nc struct {
 	name string
 	hu   float64
@@ -68,12 +69,12 @@ var (
 		{"pink", 0.0, 1.0, 0.5},
 		{"grey", 0.0, 1.0, 0.5},
 	}
+
+	reds = []nc{}
 )
 
-// TODO add grey to clrs
-// TODO add black to clrs
-// TODO add original base color to clrs
 // TODO generate shades and tints from hues
+// TODO fix shades/tints of reds
 
 func main() {
 	// ic = input color as CSS style hex
@@ -89,6 +90,8 @@ func main() {
 	//fmt.Println("Converted to HSL space:", h, s, l)
 
 	rotateHue(h, s, l)
+	grey(h, s, l)
+	stepLum(h, s, l)
 
 	// Output file with clrs as css vars
 	// Open file for writing
@@ -109,13 +112,42 @@ func main() {
 	// convert clrs to CSS output
 	for i := range clrs {
 
-		cv := colorful.Hsl(clrs[i].hu, clrs[i].sa, clrs[i].li)
+		hs := int(clrs[i].sa * 100)
+		hl := int(clrs[i].li * 100)
+		fmt.Fprintf(f, "  --%s: hsl(%1.f, %d%%, %d%%);\n", clrs[i].name, clrs[i].hu, hs, hl)
+
+		//cv := colorful.Hsl(clrs[i].hu, clrs[i].sa, clrs[i].li)
 
 		// TODO logic switch here based on command line flag for -rgb vs --hex
-		r, g, b := cv.RGB255()
-		fmt.Fprintf(f, "  --%s: rgb(%d, %d, %d);\n", clrs[i].name, r, g, b)
+		//r, g, b := cv.RGB255()
+		//fmt.Fprintf(f, "  --%s: rgb(%d, %d, %d);\n", clrs[i].name, r, g, b)
 		//hex := cv.Hex()
 		//fmt.Fprintf(f, "  --%s: %v;\n", clrs[i].name, hex)
+	}
+	_, err = fmt.Fprintf(f, "\n")
+	if err != nil {
+		fmt.Printf("Error: %v", err)
+	}
+
+	// Add a black tinted to background via alpha
+	_, err = f.WriteString("  --black: hsla(0, 100%, 0%, 0.9);\n")
+	if err != nil {
+		fmt.Printf("Error: %v", err)
+	}
+
+	// empty line
+	_, err = f.WriteString("\n")
+	if err != nil {
+		fmt.Printf("Error: %v", err)
+	}
+
+	// Print reds as CSS
+	for i := range reds {
+		s := int(reds[i].sa * 100)
+		l := int(reds[i].li * 10)
+		fmt.Fprintf(f, "  --%s: hsl(%1.f, %d%%, %d%%);\n", reds[i].name, reds[i].hu, s, l)
+		//hex := cv.Hex()
+		//fmt.Fprintf(f, "  --%s: %v;\n", reds[i].name, hex)
 	}
 	_, err = fmt.Fprintf(f, "\n")
 	if err != nil {
@@ -141,7 +173,7 @@ func rotateHue(h float64, s float64, l float64) []nc {
 		//fmt.Printf("h is: %v\n", h)
 
 		switch {
-		case h >= 0 && h <= 30:
+		case h >= 350 && h <= 360:
 			for i := range clrs {
 				if clrs[i].name == "red" {
 					clrs[i].hu = math.Floor(h)
@@ -149,7 +181,15 @@ func rotateHue(h float64, s float64, l float64) []nc {
 					clrs[i].li = l
 				}
 			}
-		case h > 30 && h <= 60:
+		case h >= 0 && h <= 20:
+			for i := range clrs {
+				if clrs[i].name == "red" {
+					clrs[i].hu = math.Floor(h)
+					clrs[i].sa = s
+					clrs[i].li = l
+				}
+			}
+		case h > 20 && h <= 50:
 			for i := range clrs {
 				if clrs[i].name == "orange" {
 					clrs[i].hu = math.Floor(h)
@@ -157,7 +197,7 @@ func rotateHue(h float64, s float64, l float64) []nc {
 					clrs[i].li = l
 				}
 			}
-		case h > 60 && h <= 90:
+		case h > 50 && h <= 80:
 			for i := range clrs {
 				if clrs[i].name == "yellow" {
 					clrs[i].hu = math.Floor(h)
@@ -165,7 +205,7 @@ func rotateHue(h float64, s float64, l float64) []nc {
 					clrs[i].li = l
 				}
 			}
-		case h > 90 && h <= 120:
+		case h > 80 && h <= 110:
 			for i := range clrs {
 				if clrs[i].name == "lime" {
 					clrs[i].hu = math.Floor(h)
@@ -173,7 +213,7 @@ func rotateHue(h float64, s float64, l float64) []nc {
 					clrs[i].li = l
 				}
 			}
-		case h > 120 && h <= 150:
+		case h > 110 && h <= 140:
 			for i := range clrs {
 				if clrs[i].name == "green" {
 					clrs[i].hu = math.Floor(h)
@@ -181,7 +221,7 @@ func rotateHue(h float64, s float64, l float64) []nc {
 					clrs[i].li = l
 				}
 			}
-		case h > 150 && h <= 180:
+		case h > 140 && h <= 170:
 			for i := range clrs {
 				if clrs[i].name == "teal" {
 					clrs[i].hu = math.Floor(h)
@@ -189,7 +229,7 @@ func rotateHue(h float64, s float64, l float64) []nc {
 					clrs[i].li = l
 				}
 			}
-		case h > 180 && h <= 210:
+		case h > 170 && h <= 200:
 			for i := range clrs {
 				if clrs[i].name == "cyan" {
 					clrs[i].hu = math.Floor(h)
@@ -197,7 +237,7 @@ func rotateHue(h float64, s float64, l float64) []nc {
 					clrs[i].li = l
 				}
 			}
-		case h > 210 && h <= 240:
+		case h > 200 && h <= 230:
 			for i := range clrs {
 				if clrs[i].name == "blue" {
 					clrs[i].hu = math.Floor(h)
@@ -205,7 +245,7 @@ func rotateHue(h float64, s float64, l float64) []nc {
 					clrs[i].li = l
 				}
 			}
-		case h > 240 && h <= 270:
+		case h > 230 && h <= 260:
 			for i := range clrs {
 				if clrs[i].name == "indigo" {
 					clrs[i].hu = math.Floor(h)
@@ -213,7 +253,7 @@ func rotateHue(h float64, s float64, l float64) []nc {
 					clrs[i].li = l
 				}
 			}
-		case h > 270 && h <= 300:
+		case h > 260 && h <= 290:
 			for i := range clrs {
 				if clrs[i].name == "violet" {
 					clrs[i].hu = math.Floor(h)
@@ -221,7 +261,7 @@ func rotateHue(h float64, s float64, l float64) []nc {
 					clrs[i].li = l
 				}
 			}
-		case h > 300 && h <= 330:
+		case h > 290 && h <= 320:
 			for i := range clrs {
 				if clrs[i].name == "fuschia" {
 					clrs[i].hu = math.Floor(h)
@@ -229,7 +269,7 @@ func rotateHue(h float64, s float64, l float64) []nc {
 					clrs[i].li = l
 				}
 			}
-		case h > 330 && h <= 360:
+		case h > 320 && h <= 350:
 			for i := range clrs {
 				if clrs[i].name == "pink" {
 					clrs[i].hu = math.Floor(h)
@@ -242,10 +282,52 @@ func rotateHue(h float64, s float64, l float64) []nc {
 	return clrs
 }
 
-// func genGrey(h float64, c float64, l float64) []nc {
+func grey(h float64, s float64, l float64) []nc {
 
-// 	n := 0.0
-// 	clrs["grey"] = colorful.Hcl(h, n, l)
+	ns := (s + 0.4) / 10
 
-// 	return clrs
-// }
+	for i := range clrs {
+		if clrs[i].name == "grey" {
+			clrs[i].hu = math.Floor(h)
+			clrs[i].sa = ns
+			clrs[i].li = 0.7
+		}
+	}
+	return clrs
+}
+
+func base(h float64, s float64, l float64) []nc {
+
+	for i := range clrs {
+		if clrs[i].name == "base" {
+			clrs[i].hu = math.Floor(h)
+			clrs[i].sa = s
+			clrs[i].li = l
+		}
+	}
+	return clrs
+}
+
+func stepLum(h float64, s float64, l float64) []nc {
+
+	// TODO Work in actual color from clrs
+	// TODO Spread of shades is not as good as palx
+
+	// step through luminosity values to give tints and shades of main colors
+	luminosity := []int{0, 1, 2, 3, 4, 5, 6, 7, 8, 9}
+
+	for x := range clrs {
+		if clrs[x].name == "red" {
+			for i := range luminosity {
+				nnc := new(nc)
+				nnc.name = "red" + strconv.Itoa(i)
+				nnc.hu = clrs[x].hu
+				nnc.sa = clrs[x].sa
+				nnc.li = float64(i)
+				reds = append(reds, *nnc)
+			}
+		}
+	}
+	return reds
+
+}
