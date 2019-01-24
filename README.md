@@ -10,6 +10,8 @@ Inspired by the javascript based [Palx](https://github.com/jxnblk/palx) it lacks
 
 Written in Golang Palegen has one advantage in that it will run on the command line and can be part of an automated workflow.
 
+Palegen uses [go-colorful](https://github.com/lucasb-eyer/go-colorful) for some colour conversions.
+
 ## Usage
 
 A single color in CSS hex style minus the hash symbol (eg #ff3300 as ff3300) should be passed when calling Palegen.
@@ -21,3 +23,8 @@ palegen ff3300
 ## Output
 
 Colours are output in hsl format as CSS variables.
+
+
+## Flaws
+
+There are some minor issues with the output.
