@@ -54,7 +54,6 @@ var (
 
 	// define a slice of structs containig main colors
 	clrs = []nc{
-		{"base", 0.0, 1.0, 0.5},
 		{"red", 0.0, 1.0, 0.5},
 		{"orange", 0.0, 1.0, 0.5},
 		{"yellow", 0.0, 1.0, 0.5},
@@ -70,7 +69,7 @@ var (
 		{"grey", 0.0, 1.0, 0.5},
 	}
 
-	reds = []nc{}
+	shades = []nc{}
 )
 
 // TODO generate shades and tints from hues
@@ -91,7 +90,7 @@ func main() {
 
 	rotateHue(h, s, l)
 	grey(h, s, l)
-	stepLum(h, s, l)
+	genShades(h, s, l)
 
 	// Output file with clrs as css vars
 	// Open file for writing
@@ -107,6 +106,12 @@ func main() {
 `)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
+	}
+
+	// Write the base input color directly
+	_, err = fmt.Fprintf(f, "  --base: hsl(%1.f, %d%%, %d%%);\n", math.Floor(h), int(s*100), int(l*100))
+	if err != nil {
+		fmt.Printf("Error: %v", err)
 	}
 
 	// convert clrs to CSS output
@@ -141,13 +146,13 @@ func main() {
 		fmt.Printf("Error: %v", err)
 	}
 
-	// Print reds as CSS
-	for i := range reds {
-		s := int(reds[i].sa * 100)
-		l := int(reds[i].li * 10)
-		fmt.Fprintf(f, "  --%s: hsl(%1.f, %d%%, %d%%);\n", reds[i].name, reds[i].hu, s, l)
+	// Print shades as CSS
+	for i := range shades {
+		s := int(shades[i].sa * 100)
+		l := int(shades[i].li * 10)
+		fmt.Fprintf(f, "  --%s: hsl(%1.f, %d%%, %d%%);\n", shades[i].name, shades[i].hu, s, l)
 		//hex := cv.Hex()
-		//fmt.Fprintf(f, "  --%s: %v;\n", reds[i].name, hex)
+		//fmt.Fprintf(f, "  --%s: %v;\n", shades[i].name, hex)
 	}
 	_, err = fmt.Fprintf(f, "\n")
 	if err != nil {
@@ -158,6 +163,9 @@ func main() {
 	if err != nil {
 		fmt.Printf("Error: %v", err)
 	}
+
+	fmt.Println("Color generation complete.")
+
 }
 
 func rotateHue(h float64, s float64, l float64) []nc {
@@ -296,38 +304,24 @@ func grey(h float64, s float64, l float64) []nc {
 	return clrs
 }
 
-func base(h float64, s float64, l float64) []nc {
-
-	for i := range clrs {
-		if clrs[i].name == "base" {
-			clrs[i].hu = math.Floor(h)
-			clrs[i].sa = s
-			clrs[i].li = l
-		}
-	}
-	return clrs
-}
-
-func stepLum(h float64, s float64, l float64) []nc {
+func genShades(h float64, s float64, l float64) []nc {
 
 	// TODO Work in actual color from clrs
 	// TODO Spread of shades is not as good as palx
 
-	// step through luminosity values to give tints and shades of main colors
-	luminosity := []int{0, 1, 2, 3, 4, 5, 6, 7, 8, 9}
+	// step through lightness values to give tints and shades of main colors
+	lightness := [10]int{9, 8, 7, 6, 5, 4, 3, 2, 1, 0}
 
 	for x := range clrs {
-		if clrs[x].name == "red" {
-			for i := range luminosity {
-				nnc := new(nc)
-				nnc.name = "red" + strconv.Itoa(i)
-				nnc.hu = clrs[x].hu
-				nnc.sa = clrs[x].sa
-				nnc.li = float64(i)
-				reds = append(reds, *nnc)
-			}
+		for i := 0; i < len(lightness); i++ {
+			nnc := new(nc)
+			nnc.name = clrs[x].name + strconv.Itoa(i)
+			nnc.hu = clrs[x].hu
+			nnc.sa = clrs[x].sa
+			nnc.li = float64(lightness[i])
+			shades = append(shades, *nnc)
 		}
 	}
-	return reds
+	return shades
 
 }
