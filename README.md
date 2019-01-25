@@ -4,7 +4,7 @@ Command line based automated CSS colour palette generator. (I pronounce it "pal-
 
 Palegen is a command line application that accepts a single colour, generates a harmonius palette and outputs the colours to a file as CSS variables.
 
-![screenshot](https://github.com/adrinux/palegen/blob/master/example/screenshot-Palegen-ff3300.png)
+![screenshot](https://github.com/adrinux/palegen/blob/master/example/screenshot-Palegen-ff3300_thumb.png)
 
 Inspired by javascript based [Palx](https://github.com/jxnblk/palx) Palegen (for the moment) lacks some of Palx's sohpistication.
 
