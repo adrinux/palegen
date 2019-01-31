@@ -1,3 +1,6 @@
+# *NOTE*
+Palegen is currently in development and output colours may shift slightly between versions. It's useable but for the moment I recommoned a one time generation rather than including it as part of an automated build.
+
 # Palegen
 
 CLI based automated CSS colour palette generator. (Pronounced "pal-ee-jen".)
