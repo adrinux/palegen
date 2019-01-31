@@ -123,7 +123,7 @@ func main() {
 	// Print lightness variants as CSS
 	for i := range variants {
 		s := int(variants[i].sa * 100)
-		l := int(variants[i].li * 10)
+		l := int(variants[i].li)
 		fmt.Fprintf(f, "  --%s: hsl(%1.f, %d%%, %d%%);\n", variants[i].name, variants[i].hu, s, l)
 		//hex := cv.Hex()
 		//fmt.Fprintf(f, "  --%s: %v;\n", variants[i].name, hex)
@@ -276,7 +276,7 @@ func grey(h float64, s float64, l float64) []nc {
 func genVariants(h float64, s float64, l float64) []nc {
 
 	// step through fixed lightness values
-	lightness := [10]float64{9.5, 8.7, 7.8, 6.9, 6, 5.1, 4.2, 3.3, 2.4, 1.5}
+	lightness := [10]float64{98, 88, 78, 67, 57, 47, 37, 26, 16, 6}
 
 	for x := range clrs {
 		for i := 0; i < len(lightness); i++ {
