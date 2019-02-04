@@ -113,19 +113,19 @@ func main() {
 		// black line in css
 		_, err = fmt.Fprintf(f, "\n")
 		if err != nil {
-			fmt.Printf("Error: %v", err)
+			fmt.Printf("Error: %v\n", err)
 		}
 
 		// Directly Add a black tinted to background via alpha
 		_, err = f.WriteString("  --black: hsla(0, 100%, 0%, 0.9);\n")
 		if err != nil {
-			fmt.Printf("Error: %v", err)
+			fmt.Printf("Error: %v\n", err)
 		}
 
 		// empty line
 		_, err = f.WriteString("\n")
 		if err != nil {
-			fmt.Printf("Error: %v", err)
+			fmt.Printf("Error: %v\n", err)
 		}
 
 		// Print lightness variants as CSS
@@ -140,7 +140,7 @@ func main() {
 		// end root section of css
 		_, err = f.WriteString("\n}")
 		if err != nil {
-			fmt.Printf("Error: %v", err)
+			fmt.Printf("Error: %v\n", err)
 		}
 
 		fmt.Println("Color generation complete.")
