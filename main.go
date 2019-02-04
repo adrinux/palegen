@@ -53,7 +53,11 @@ func main() {
 	ic := "#" + os.Args[1]
 
 	// convert input to colorful.color as hex
-	hc, _ := colorful.Hex(ic)
+	hc, err := colorful.Hex(ic)
+	if err != nil {
+		fmt.Printf("Error: %v\n", err)
+		return
+	}
 
 	// colorful.Color converted to hsl space (hue, saturation, lightness)
 	h, s, l := hc.Hsl()
@@ -88,7 +92,7 @@ func main() {
 		// Write the input base color directly as css vars
 		_, err = fmt.Fprintf(f, "  --base: hsl(%1.f, %d%%, %d%%);\n", math.Floor(h), int(s*100), int(l*100))
 		if err != nil {
-			fmt.Printf("Error: %v", err)
+			fmt.Printf("Error: %v\n", err)
 		}
 
 		// convert clrs slice to CSS output as css vars
