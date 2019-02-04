@@ -44,7 +44,12 @@ var (
 
 func main() {
 
-	if len(os.Args[1]) != (6) {
+	if len(os.Args) != 2 {
+		fmt.Println("No input colour specified. Please use a 6 character hex colour.")
+		return
+	}
+
+	if len(os.Args[1]) != 6 {
 		fmt.Println("Unrecognized input format. Please use a 6 character hex colour.")
 		return
 	}
