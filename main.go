@@ -43,6 +43,12 @@ var (
 )
 
 func main() {
+
+	if len(os.Args[1]) != (6) {
+		fmt.Println("Unrecognized input format. Please use a 6 character hex colour.")
+		return
+	}
+
 	// input color as CSS style hex
 	ic := "#" + os.Args[1]
 
