@@ -95,24 +95,17 @@ func main() {
 		}
 
 		// Write the input base color directly as css vars
-		_, err = fmt.Fprintf(f, "  --base: hsl(%1.f, %d%%, %d%%);\n", math.Floor(h), int(s*100), int(l*100))
+		_, err = fmt.Fprintf(f, "  --base: hsla(%1.f, %d%%, %d%%, 1);\n", math.Floor(h), int(s*100), int(l*100))
 		if err != nil {
 			fmt.Printf("Error: %v\n", err)
 		}
 
 		// convert clrs slice to CSS output as css vars
 		for i := range clrs {
-
 			hs := int(clrs[i].sa * 100)
 			hl := int(clrs[i].li * 100)
-			fmt.Fprintf(f, "  --%s: hsl(%1.f, %d%%, %d%%);\n", clrs[i].name, clrs[i].hu, hs, hl)
-
-			// TODO logic switch here based on command line flag for -hex vs --rgb vs default hsl
-			//cv := colorful.Hsl(clrs[i].hu, clrs[i].sa, clrs[i].li)
-			//r, g, b := cv.RGB255()
-			//fmt.Fprintf(f, "  --%s: rgb(%d, %d, %d);\n", clrs[i].name, r, g, b)
-			//hex := cv.Hex()
-			//fmt.Fprintf(f, "  --%s: %v;\n", clrs[i].name, hex)
+			ha := 1
+			fmt.Fprintf(f, "  --%s: hsla(%1.f, %d%%, %d%%, %d);\n", clrs[i].name, clrs[i].hu, hs, hl, ha)
 		}
 
 		// black line in css
@@ -137,9 +130,8 @@ func main() {
 		for i := range variants {
 			s := int(variants[i].sa * 100)
 			l := int(variants[i].li)
-			fmt.Fprintf(f, "  --%s: hsl(%1.f, %d%%, %d%%);\n", variants[i].name, variants[i].hu, s, l)
-			//hex := cv.Hex()
-			//fmt.Fprintf(f, "  --%s: %v;\n", variants[i].name, hex)
+			a := 1
+			fmt.Fprintf(f, "  --%s: hsla(%1.f, %d%%, %d%%, %d);\n", variants[i].name, variants[i].hu, s, l, a)
 		}
 
 		// end root section of css
