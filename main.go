@@ -115,7 +115,13 @@ func main() {
 		}
 
 		// Directly Add a black tinted to background via alpha
-		_, err = f.WriteString("  --black: hsla(0, 100%, 0%, 0.9);\n")
+		_, err = f.WriteString("  --textblack: hsla(0, 100%, 0%, 0.9);\n")
+		if err != nil {
+			fmt.Printf("Error: %v\n", err)
+		}
+
+		// Directly Add a wite tinted to background via alpha
+		_, err = f.WriteString("  --textwhite: hsla(360, 100%, 100%, 0.9);\n")
 		if err != nil {
 			fmt.Printf("Error: %v\n", err)
 		}
