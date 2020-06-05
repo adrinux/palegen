@@ -272,13 +272,13 @@ func rotateHue(h float64, s float64, l float64) []nc {
 
 func grey(h float64, s float64, l float64) []nc {
 
-	ns := (s + 0.4) / 10
+	ns := s / 10
 
 	for i := range clrs {
 		if clrs[i].name == "grey" {
 			clrs[i].hu = math.Floor(h)
 			clrs[i].sa = ns
-			clrs[i].li = 0.7
+			clrs[i].li = 0.5
 		}
 	}
 	return clrs
