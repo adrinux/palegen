@@ -20,9 +20,9 @@ h1 {
     margin: 0;
 }
 
-.cells {
+.input {
     display: grid;
-    grid-template-columns: repeat(14, 1fr);
+    grid-template-columns: repeat(11, 1fr);
     grid-template-rows: auto;
     grid-column-gap: 16px;
     align-items: start;
@@ -33,14 +33,14 @@ h1 {
 }
 
 .input > .label {
-    grid-column: 2 / span 1;
+    grid-column: 1 / span 1;
     grid-row: 1 1;
     align-self: start;
     line-height: 32px;
 }
 
 .input > .base {
-    grid-column: 3 / span 2;
+    grid-column: 2 / span 1;
     grid-row: 1 1;
 }
 
@@ -48,15 +48,14 @@ h1 {
     height: 32px;
 }
 
-.cells > div {
+.input > div {
     margin-bottom: 20px;
-    width: calc(100/13%);
     font-size: 12px;
     text-align: center;
     text-transform: capitalize;
 }
 
-.cells > div > div {
+.input > div > div {
     height: 16px;
     width: 100%;
 }
@@ -79,15 +78,15 @@ h1 {
 
 
 .variants {
-    margin-top: 16px;
+    margin-top: 12px;
     display: grid;
-    grid-template-columns: repeat(10, 1fr);
+    grid-template-columns: repeat(11, 1fr);
     grid-template-rows: auto;
     grid-column-gap: 16px;
 }
 
 .variants > div {
-    margin-bottom: 20px;
+    margin-bottom: 16px;
     width: calc(100/13%);
     font-size: 12px;
     text-align: center;
