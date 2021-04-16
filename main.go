@@ -6,7 +6,9 @@ import (
 	"os"
 	"strconv"
 
+	ini "github.com/gookit/ini"
 	colorful "github.com/lucasb-eyer/go-colorful"
+	
 )
 
 // named color in hsl space
@@ -44,18 +46,28 @@ var (
 
 func main() {
 
-	if len(os.Args) != 2 {
-		fmt.Println("No input colour specified. Please use a 6 character hex colour.")
-		return
+	// Load configuration from file
+  config, err := ini.LoadExists("palegen.ini")
+  if err != nil {
+		panic(err)
 	}
 
-	if len(os.Args[1]) != 6 {
-		fmt.Println("Unrecognized input format. Please use a 6 character hex colour.")
-		return
-	}
+	// if len(os.Args) != 2 {
+	// 	fmt.Println("No input colour specified. Please use a 6 character hex colour.")
+	// 	return
+	// }
+
+	// if len(os.Args[1]) != 6 {
+	// 	fmt.Println("Unrecognized input format. Please use a 6 character hex colour.")
+	// 	return
+	// }
+
+  // Read base colour from config
+  base, ok := config.String("base")
+  fmt.Print(ok, base) // true inhere
 
 	// input color as CSS style hex
-	ic := "#" + os.Args[1]
+	ic := base
 
 	// convert input to colorful.color as hex
 	hc, err := colorful.Hex(ic)
