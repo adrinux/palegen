@@ -8,7 +8,6 @@ import (
 
 	ini "github.com/gookit/ini"
 	colorful "github.com/lucasb-eyer/go-colorful"
-	
 )
 
 // named color in hsl space
@@ -47,8 +46,8 @@ var (
 func main() {
 
 	// Load configuration from file
-  config, err := ini.LoadExists("palegen.ini")
-  if err != nil {
+	config, err := ini.LoadExists("palegen.ini")
+	if err != nil {
 		panic(err)
 	}
 
@@ -62,12 +61,13 @@ func main() {
 	// 	return
 	// }
 
-  // Read base colour from config
-  base, ok := config.String("base")
-  fmt.Print(ok, base) // true inhere
-
+	// Read base colour from config
+	base, ok := config.String("base")
+	if ok {
+		fmt.Println("Base color found:", base)
+	}
 	// input color as CSS style hex
-	ic := base
+	ic := "#" + base
 
 	// convert input to colorful.color as hex
 	hc, err := colorful.Hex(ic)
