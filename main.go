@@ -92,8 +92,13 @@ func main() {
 	genVariants(h, s, l)
 
 	// Output file with clrs as css vars
-	// Open file for writing
-	if f, err := os.Create("colors.css"); err != nil {
+	// Get output destination
+	outputFile, ok := config.String("outputFile")
+	if !ok {
+		outputFile = "colors.css"
+	}
+	// Open outputFile for writing
+	if f, err := os.Create(outputFile); err != nil {
 		fmt.Printf("Error creating file: %v\n", err)
 	} else {
 		// defers close file to when function finishes running
