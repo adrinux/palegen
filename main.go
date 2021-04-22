@@ -10,7 +10,7 @@ import (
 	colorful "github.com/lucasb-eyer/go-colorful"
 )
 
-// named color in hcl space
+// named color with values for lightness, chroma and hue
 type nc struct {
 	name string
 	li   float64
@@ -19,23 +19,17 @@ type nc struct {
 }
 
 var (
-	// h float64
-	// c float64
-	// l float64
-
-	// define a slice of structs containig main hues as go-colorful colours
+	// define a slice of structs containig main hues
 	clrs = []nc{
 		{"red", 0.0, 1.0, 0.5},
 		{"orange", 0.0, 1.0, 0.5},
 		{"yellow", 0.0, 1.0, 0.5},
 		{"lime", 0.0, 1.0, 0.5},
 		{"green", 0.0, 1.0, 0.5},
-		{"teal", 0.0, 1.0, 0.5},
 		{"cyan", 0.0, 1.0, 0.5},
 		{"blue", 0.0, 1.0, 0.5},
 		{"indigo", 0.0, 1.0, 0.5},
-		{"violet", 0.0, 1.0, 0.5},
-		{"fuschia", 0.0, 1.0, 0.5},
+		{"purple", 0.0, 1.0, 0.5},
 		{"pink", 0.0, 1.0, 0.5},
 		{"grey", 0.0, 1.0, 0.5},
 	}
@@ -67,19 +61,19 @@ func main() {
 	}
 
 	// colorful.Color converted to LCHuv space (luminosity, chroma, hue)
-	l, c, h := hc.LuvLCh()
+	h, c, l := hc.Hcl()
 
 	fmt.Println("Input color:", ic)
-	fmt.Println("Converted to LCHuv space:", l, c, h)
+	fmt.Println("Converted to HCL space:", h, c, l)
 
-	// generate colors through 12 hue steps
-	rotateHue(l, c, h)
+	// generate colors
+	rotateHue(h, c, l)
 
 	//generate a grey tinted with input (base) color
-	grey(l, c, h)
+	grey(h, c, l)
 
-	// generate 10 lightness level variants of each hue
-	genVariants(l, c, h)
+	// generate lightness variants of each hue
+	genVariants(h, c, l)
 
 	// Output file with clrs as css vars
 	// Get output destination
@@ -101,16 +95,15 @@ func main() {
 			fmt.Printf("Error: %v\n", err)
 		}
 
-		// Write the input base color directly as css vars
-		// base as hex
-		// base := colorful.Hcl(h, c, l).Clamped().Hex()
-		// _, err = fmt.Fprintf(f, "  --base: %s;\n", base)
-		// if err != nil {
-		// 	fmt.Printf("Error: %v\n", err)
-		// }
+		// base unprocess for comparison
+		_, err = fmt.Fprintf(f, "  --basehex: %s;\n", ic)
+		if err != nil {
+			fmt.Printf("Error: %v\n", err)
+		}
 
+		// Write the input base color directly as css vars
 		// base as hsla
-		h, s, l := colorful.LuvLCh(l, c, h).HSLuv()
+		h, s, l := hc.Hsl()
 		_, err = fmt.Fprintf(f, "  --base: hsla(%.2f, %.2f%%, %.2f%%, 1);\n", h, float64(s*100), float64(l*100))
 		if err != nil {
 			fmt.Printf("Error: %v\n", err)
@@ -118,7 +111,7 @@ func main() {
 
 		// convert clrs slice to CSS output as css vars
 		for i := range clrs {
-			h, s, l := colorful.LuvLCh(clrs[i].li, clrs[i].ch, clrs[i].hu).HSLuv()
+			h, s, l := colorful.Hcl(clrs[i].hu, clrs[i].ch, clrs[i].li).HSLuv()
 			_, err = fmt.Fprintf(f, "  --%s: hsla(%.2f, %.2f%%, %.2f%%, 1);\n", clrs[i].name, h, float64(s*100), float64(l*100))
 			if err != nil {
 				fmt.Printf("Error: %v\n", err)
@@ -151,9 +144,8 @@ func main() {
 
 		// Print lightness variants as CSS
 		for i := range variants {
-			h, s, _ := colorful.LuvLCh(variants[i].li, variants[i].ch, variants[i].hu).HSLuv()
-			fmt.Println(variants[i].ch, s)
-			_, err = fmt.Fprintf(f, "  --%s: hsla(%.2f, %.2f%%, %.2f%%, 1);\n", variants[i].name, h, float64(s*100), variants[i].li)
+			h, s, l := colorful.Hcl(variants[i].hu, variants[i].ch, variants[i].li).HSLuv()
+			_, err = fmt.Fprintf(f, "  --%s: hsla(%.2f, %.2f%%, %.2f%%, 1);\n", variants[i].name, h, float64(s*100), float64(l*100))
 			if err != nil {
 				fmt.Printf("Error: %v\n", err)
 			}
@@ -169,10 +161,10 @@ func main() {
 	}
 }
 
-func rotateHue(l float64, c float64, h float64) []nc {
+func rotateHue(h float64, c float64, l float64) []nc {
 
-	// rotate the hue value around the full 360 degress with 12 steps
-	steps := 12
+	// rotate the hue value around the full 360 degress with 10 steps
+	steps := 10
 	hueStep := float64(360 / steps)
 
 	for i := 0; i < steps; i++ {
@@ -180,15 +172,7 @@ func rotateHue(l float64, c float64, h float64) []nc {
 		h := math.Mod(((float64(i) * hueStep) + h), 360)
 
 		switch {
-		case h >= 0 && h <= 10:
-			for i := range clrs {
-				if clrs[i].name == "pink" {
-					clrs[i].li = l
-					clrs[i].ch = c
-					clrs[i].hu = math.Floor(h)
-				}
-			}
-		case h >= 10 && h <= 40:
+		case h >= 0 && h <= 12:
 			for i := range clrs {
 				if clrs[i].name == "red" {
 					clrs[i].li = l
@@ -196,7 +180,7 @@ func rotateHue(l float64, c float64, h float64) []nc {
 					clrs[i].hu = math.Floor(h)
 				}
 			}
-		case h > 40 && h <= 70:
+		case h >= 12 && h <= 48:
 			for i := range clrs {
 				if clrs[i].name == "orange" {
 					clrs[i].li = l
@@ -204,7 +188,7 @@ func rotateHue(l float64, c float64, h float64) []nc {
 					clrs[i].hu = math.Floor(h)
 				}
 			}
-		case h > 70 && h <= 100:
+		case h > 48 && h <= 84:
 			for i := range clrs {
 				if clrs[i].name == "yellow" {
 					clrs[i].li = l
@@ -212,7 +196,7 @@ func rotateHue(l float64, c float64, h float64) []nc {
 					clrs[i].hu = math.Floor(h)
 				}
 			}
-		case h > 100 && h <= 130:
+		case h > 84 && h <= 120:
 			for i := range clrs {
 				if clrs[i].name == "lime" {
 					clrs[i].li = l
@@ -220,7 +204,7 @@ func rotateHue(l float64, c float64, h float64) []nc {
 					clrs[i].hu = math.Floor(h)
 				}
 			}
-		case h > 130 && h <= 160:
+		case h > 120 && h <= 156:
 			for i := range clrs {
 				if clrs[i].name == "green" {
 					clrs[i].li = l
@@ -228,15 +212,7 @@ func rotateHue(l float64, c float64, h float64) []nc {
 					clrs[i].hu = math.Floor(h)
 				}
 			}
-		case h > 160 && h <= 190:
-			for i := range clrs {
-				if clrs[i].name == "teal" {
-					clrs[i].li = l
-					clrs[i].ch = c
-					clrs[i].hu = math.Floor(h)
-				}
-			}
-		case h > 190 && h <= 220:
+		case h > 156 && h <= 192:
 			for i := range clrs {
 				if clrs[i].name == "cyan" {
 					clrs[i].li = l
@@ -244,7 +220,7 @@ func rotateHue(l float64, c float64, h float64) []nc {
 					clrs[i].hu = math.Floor(h)
 				}
 			}
-		case h > 220 && h <= 250:
+		case h > 192 && h <= 228:
 			for i := range clrs {
 				if clrs[i].name == "blue" {
 					clrs[i].li = l
@@ -252,7 +228,7 @@ func rotateHue(l float64, c float64, h float64) []nc {
 					clrs[i].hu = math.Floor(h)
 				}
 			}
-		case h > 250 && h <= 280:
+		case h > 228 && h <= 264:
 			for i := range clrs {
 				if clrs[i].name == "indigo" {
 					clrs[i].li = l
@@ -260,25 +236,25 @@ func rotateHue(l float64, c float64, h float64) []nc {
 					clrs[i].hu = math.Floor(h)
 				}
 			}
-		case h > 280 && h <= 310:
+		case h > 264 && h <= 300:
 			for i := range clrs {
-				if clrs[i].name == "violet" {
+				if clrs[i].name == "purple" {
 					clrs[i].li = l
 					clrs[i].ch = c
 					clrs[i].hu = math.Floor(h)
 				}
 			}
-		case h > 310 && h <= 340:
-			for i := range clrs {
-				if clrs[i].name == "fuschia" {
-					clrs[i].li = l
-					clrs[i].ch = c
-					clrs[i].hu = math.Floor(h)
-				}
-			}
-		case h > 340 && h <= 360:
+		case h > 300 && h <= 336:
 			for i := range clrs {
 				if clrs[i].name == "pink" {
+					clrs[i].li = l
+					clrs[i].ch = c
+					clrs[i].hu = math.Floor(h)
+				}
+			}
+		case h > 336 && h <= 360:
+			for i := range clrs {
+				if clrs[i].name == "red" {
 					clrs[i].li = l
 					clrs[i].ch = c
 					clrs[i].hu = math.Floor(h)
@@ -289,9 +265,9 @@ func rotateHue(l float64, c float64, h float64) []nc {
 	return clrs
 }
 
-func grey(l float64, c float64, h float64) []nc {
+func grey(h float64, c float64, l float64) []nc {
 
-	nc := c / 10
+	nc := c / 12
 
 	for i := range clrs {
 		if clrs[i].name == "grey" {
@@ -303,10 +279,10 @@ func grey(l float64, c float64, h float64) []nc {
 	return clrs
 }
 
-func genVariants(l float64, c float64, h float64) []nc {
+func genVariants(h float64, c float64, l float64) []nc {
 
 	// step through fixed lightness values
-	lightness := [10]float64{98, 88, 78, 67, 57, 47, 37, 26, 16, 6}
+	lightness := [10]float64{0.98, 0.88, 0.78, 0.67, 0.57, 0.47, 0.37, 0.26, 0.16, 0.06}
 
 	for x := range clrs {
 		for i := 0; i < len(lightness); i++ {
@@ -319,5 +295,4 @@ func genVariants(l float64, c float64, h float64) []nc {
 		}
 	}
 	return variants
-
 }
