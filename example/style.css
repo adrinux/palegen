@@ -44,7 +44,7 @@ h1 {
   grid-row: 1;
 }
 
-.input > .basehex {
+.input > .raw {
   grid-column: 3 / span 1;
   grid-row: 1;
 }
@@ -87,7 +87,7 @@ h1 {
   font-size: 16px;
 }
 
-.basehex div { background-color: var(--basehex); }
+.raw div { background-color: var(--basehex); }
 .base div { background-color: var(--base); }
 .red div { background-color: var(--red); }
 .orange div { background-color: var(--orange); }

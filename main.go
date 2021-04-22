@@ -96,7 +96,7 @@ func main() {
 		}
 
 		// base unprocess for comparison
-		_, err = fmt.Fprintf(f, "  --basehex: %s;\n", ic)
+		_, err = fmt.Fprintf(f, "  --raw: %s;\n", ic)
 		if err != nil {
 			fmt.Printf("Error: %v\n", err)
 		}
