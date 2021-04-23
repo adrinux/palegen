@@ -14,6 +14,7 @@ header {
 
 header p {
   margin-top: 0;
+  margin-bottom: 2rem;
 }
 
 h1 {
@@ -22,7 +23,7 @@ h1 {
 
 .input {
   display: grid;
-  grid-template-columns: repeat(11, 1fr);
+  grid-template-columns: repeat(9, 1fr);
   grid-template-rows: auto;
   grid-column-gap: 16px;
   align-items: start;
@@ -66,23 +67,23 @@ h1 {
 }
 
 .cells > .textblack {
-  grid-column: 4 / span 1;
+  grid-column: 8 / span 1;
   grid-row: 1;
 }
 
 .cells > .textwhite {
-  grid-column: 5 / span 1;
-  grid-row: 1s;
+  grid-column: 9 / span 1;
+  grid-row: 1;
 }
 
 .textblack div {
-  background-color: var(--blue1);
+  background-color: var(--grey1);
   color: var(--textblack);
   font-size: 16px;
 }
 
 .textwhite div {
-  background-color: var(--blue8);
+  background-color: var(--grey7);
   color: var(--textwhite);
   font-size: 16px;
 }
@@ -105,7 +106,7 @@ h1 {
 .variants {
   margin-top: 12px;
   display: grid;
-  grid-template-columns: repeat(11, 1fr);
+  grid-template-columns: repeat(9, 1fr);
   grid-template-rows: auto;
   grid-column-gap: 16px;
 }

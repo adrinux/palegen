@@ -282,7 +282,7 @@ func grey(h float64, c float64, l float64) []nc {
 func genVariants(h float64, c float64, l float64) []nc {
 
 	// step through fixed lightness values
-	lightness := [10]float64{0.98, 0.88, 0.78, 0.67, 0.57, 0.47, 0.37, 0.26, 0.16, 0.06}
+	lightness := [8]float64{0.98, 0.9, 0.79, 0.66, 0.46, 0.32, 0.2, 0.1}
 
 	for x := range clrs {
 		for i := 0; i < len(lightness); i++ {
