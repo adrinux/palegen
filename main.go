@@ -35,7 +35,8 @@ var (
 		{"grey", 0.0, 1.0, 0.5},
 	}
 
-	variants = []nc{}
+	variants     = []nc{}
+	darkVariants = []nc{}
 )
 
 func main() {
@@ -129,6 +130,9 @@ func main() {
 	// generate lightness variants of each hue
 	genVariants(h, c, l)
 
+	// generate dark mode variants of each hue
+	genDarkVariants(h, c, l)
+
 	// Output file with clrs as css vars
 	// Get output destination
 	outputFile, ok := config.String("outputFile")
@@ -194,6 +198,14 @@ func main() {
 		for i := range variants {
 			h, s, l := colorful.Hcl(variants[i].hu, variants[i].ch, variants[i].li).HSLuv()
 			_, err = fmt.Fprintf(f, "  --%s: hsla(%.2f, %.2f%%, %.2f%%, 1);\n", variants[i].name, h, float64(s*100), float64(l*100))
+			if err != nil {
+				fmt.Printf("Error: %v\n", err)
+			}
+		}
+
+		for i := range darkVariants {
+			h, s, l := colorful.Hcl(darkVariants[i].hu, darkVariants[i].ch, darkVariants[i].li).HSLuv()
+			_, err = fmt.Fprintf(f, "  --%s: hsla(%.2f, %.2f%%, %.2f%%, 1);\n", darkVariants[i].name, h, float64(s*100), float64(l*100))
 			if err != nil {
 				fmt.Printf("Error: %v\n", err)
 			}
@@ -343,4 +355,21 @@ func genVariants(h float64, c float64, l float64) []nc {
 		}
 	}
 	return variants
+}
+
+func genDarkVariants(h float64, c float64, l float64) []nc {
+	// step through fixed lightness values
+	darkness := [8]float64{0.1, 0.2, 0.32, 0.46, 0.66, 0.79, 0.9, 0.98}
+
+	for x := range clrs {
+		for i := 0; i < len(darkness); i++ {
+			nnc := new(nc)
+			nnc.name = clrs[x].name + strconv.Itoa(i)
+			nnc.li = darkness[i]
+			nnc.ch = clrs[x].ch
+			nnc.hu = clrs[x].hu
+			darkVariants = append(darkVariants, *nnc)
+		}
+	}
+	return darkVariants
 }
