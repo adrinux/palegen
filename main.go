@@ -5,6 +5,7 @@ import (
 	"math"
 	"os"
 	"strconv"
+	"strings"
 
 	ini "github.com/gookit/ini"
 	colorful "github.com/lucasb-eyer/go-colorful"
@@ -42,28 +43,59 @@ func main() {
 	// Load configuration from file
 	config, err := ini.LoadExists("palegen.ini")
 	if err != nil {
-		panic(err)
+		fmt.Printf("Error: %v\n", err)
 	}
 
 	// Read base colour from config
+	var inputFormat string
+	var ic colorful.Color
+
 	base, ok := config.String("hex")
 	if ok {
-		fmt.Println("Base color found: hex", base)
-	}
-	// input color as CSS style hex
-	ic := base
-
-	// convert input from hex to colorful.color
-	hc, err := colorful.Hex(ic)
-	if err != nil {
-		fmt.Printf("Error: %v\n", err)
-		return
+		inputFormat = "hex"
 	}
 
-	// colorful.Color converted to LCHuv space (luminosity, chroma, hue)
-	h, c, l := hc.Hcl()
+	baseRgb, ok := config.String("rgb")
+	if ok {
+		inputFormat = "rgb"
+	}
 
-	fmt.Println("Input color:", ic)
+	fmt.Println("inputFormat:", inputFormat)
+
+	switch inputFormat {
+	case "hex":
+		var err error
+		fmt.Println("Base color found:", base)
+		ic, err = colorful.Hex(base)
+		if err != nil {
+			fmt.Printf("Error: %v\n", err)
+		}
+		fmt.Println("Input color set: hex", ic)
+	case "rgb":
+		unspaced := strings.ReplaceAll(baseRgb, " ", "")
+		values := strings.Split(unspaced, ",")
+		r, err := strconv.ParseFloat(values[0], 64)
+		if err != nil {
+			fmt.Printf("Error: %v\n", err)
+		}
+		g, err := strconv.ParseFloat(values[1], 64)
+		if err != nil {
+			fmt.Printf("Error: %v\n", err)
+		}
+		b, err := strconv.ParseFloat(values[2], 64)
+		if err != nil {
+			fmt.Printf("Error: %v\n", err)
+		}
+		ic = colorful.Color{(r / 100), (g / 100), (b / 100)}
+		fmt.Println("Input color set: RGB", ic)
+	}
+
+	// For testing
+	//fmt.Println("Input color now:", ic)
+
+	// Input colour converted to LCHuv space (luminosity, chroma, hue)
+	h, c, l := ic.Hcl()
+
 	fmt.Println("Converted to HCL space:", h, c, l)
 
 	// generate colors
@@ -95,15 +127,9 @@ func main() {
 			fmt.Printf("Error: %v\n", err)
 		}
 
-		// base unprocess for comparison
-		_, err = fmt.Fprintf(f, "  --raw: %s;\n", ic)
-		if err != nil {
-			fmt.Printf("Error: %v\n", err)
-		}
-
 		// Write the input base color directly as css vars
 		// base as hsla
-		h, s, l := hc.Hsl()
+		h, s, l := ic.Hsl()
 		_, err = fmt.Fprintf(f, "  --base: hsla(%.2f, %.2f%%, %.2f%%, 1);\n", h, float64(s*100), float64(l*100))
 		if err != nil {
 			fmt.Printf("Error: %v\n", err)

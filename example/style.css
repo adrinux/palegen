@@ -45,11 +45,6 @@ h1 {
   grid-row: 1;
 }
 
-.input > .raw {
-  grid-column: 3 / span 1;
-  grid-row: 1;
-}
-
 .input > div {
   margin-bottom: 20px;
   text-align: center;
@@ -88,7 +83,6 @@ h1 {
   font-size: 16px;
 }
 
-.raw div { background-color: var(--raw); }
 .base div { background-color: var(--base); }
 .red div { background-color: var(--red); }
 .orange div { background-color: var(--orange); }
