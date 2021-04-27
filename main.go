@@ -60,6 +60,11 @@ func main() {
 		inputFormat = "rgb"
 	}
 
+	baseHsl, ok := config.StringMap("hsl")
+	if ok {
+		inputFormat = "hsl"
+	}
+
 	fmt.Println("inputFormat:", inputFormat)
 
 	switch inputFormat {
@@ -88,12 +93,27 @@ func main() {
 		}
 		ic = colorful.Color{(r / 100), (g / 100), (b / 100)}
 		fmt.Println("Input color set: RGB", ic)
+	case "hsl":
+		h, err := strconv.ParseFloat(baseHsl["h"], 64)
+		if err != nil {
+			fmt.Printf("Error: %v\n", err)
+		}
+		s, err := strconv.ParseFloat(baseHsl["s"], 64)
+		if err != nil {
+			fmt.Printf("Error: %v\n", err)
+		}
+		l, err := strconv.ParseFloat(baseHsl["l"], 64)
+		if err != nil {
+			fmt.Printf("Error: %v\n", err)
+		}
+		fmt.Println("Input hsl() values:", h, s, l)
+		ic = colorful.Hsl(h, (s / 100), (l / 100))
 	}
 
 	// For testing
-	//fmt.Println("Input color now:", ic)
+	fmt.Println("Input color now:", ic)
 
-	// Input colour converted to LCHuv space (luminosity, chroma, hue)
+	// Input colour converted to Hcl space (hue, chroma, luminosity)
 	h, c, l := ic.Hcl()
 
 	fmt.Println("Converted to HCL space:", h, c, l)
