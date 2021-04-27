@@ -60,9 +60,9 @@ func main() {
 		inputFormat = "rgb"
 	}
 
-	baseHsl, ok := config.StringMap("hsl")
+	baseLch, ok := config.String("lch")
 	if ok {
-		inputFormat = "hsl"
+		inputFormat = "lch"
 	}
 
 	fmt.Println("inputFormat:", inputFormat)
@@ -93,21 +93,23 @@ func main() {
 		}
 		ic = colorful.Color{(r / 100), (g / 100), (b / 100)}
 		fmt.Println("Input color set: RGB", ic)
-	case "hsl":
-		h, err := strconv.ParseFloat(baseHsl["h"], 64)
+	case "lch":
+		unspaced := strings.ReplaceAll(baseLch, " ", "")
+		values := strings.Split(unspaced, ",")
+		l, err := strconv.ParseFloat(values[0], 64)
 		if err != nil {
 			fmt.Printf("Error: %v\n", err)
 		}
-		s, err := strconv.ParseFloat(baseHsl["s"], 64)
+		c, err := strconv.ParseFloat(values[1], 64)
 		if err != nil {
 			fmt.Printf("Error: %v\n", err)
 		}
-		l, err := strconv.ParseFloat(baseHsl["l"], 64)
+		h, err := strconv.ParseFloat(values[2], 64)
 		if err != nil {
 			fmt.Printf("Error: %v\n", err)
 		}
-		fmt.Println("Input hsl() values:", h, s, l)
-		ic = colorful.Hsl(h, (s / 100), (l / 100))
+		fmt.Println("Input lch() values:", l, c, h)
+		ic = colorful.Hcl(h, (c / 100), (l / 100))
 	}
 
 	// For testing
