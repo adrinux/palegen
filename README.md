@@ -1,6 +1,3 @@
-# *NOTE*
-Palegen is currently in development and output colours may shift slightly between versions. It's useable but for the moment I recommoned a one time generation rather than including it as part of an automated build.
-
 # Palegen
 
 CLI based automated CSS colour palette generator. (Pronounced "pal-ee-jen".)
@@ -9,40 +6,50 @@ Palegen is a command line application that accepts a single colour, generates a 
 
 ![screenshot of palegen html page showing output colours](https://github.com/adrinux/palegen/blob/master/example/screenshot-Palegen-ff3300_thumb.png)
 
-Inspired by Javascript based [Palx](https://github.com/jxnblk/palx), Palegen (for the moment) lacks some of Palx's sohpistication.
+Inspired by Javascript based [Palx](https://github.com/jxnblk/palx), Palegen (for the moment) lacks some of Palx's sophistication.
 
-Palegen has one advantage in that it runs on the command line and can be part of an automated workflow.
+Palegen has one advantage in that it runs on the command line and can be part of an automated workflow (but note that output colours may shift slightly between versions).
 
 Written in Golang Palegen uses the [go-colorful](https://github.com/lucasb-eyer/go-colorful) library for colour conversions.
 
 ## Usage
 
-A single color in CSS hex style without the hash symbol should be passed when calling Palegen. For example using #ff3300
+Palegen reads from a palegen.ini configuration file, see palegen.ini for a commented example.
+Currently you define a single input color and a destination for the output CSS. Then run palegen from the directory containing the ini file.
 
 ```bash
-palegen ff3300
+palegen
 ```
 
 ## Output
 
-Colours are output in hsl format as CSS variables to a file named 'colors.css'. Example CSS output from the above command is [here](https://github.com/adrinux/palegen/blob/master/example/colors.css). 'colors.css' will be saved where the command is run from.
+Colours are output in hsl format as CSS variables to a file named 'colors.css'. Example CSS output from the above command and default palegen.ini is [here](https://github.com/adrinux/palegen/blob/master/example/colors.css).
 
-If you run palegen in the example folder you can view the results by opening palegen.html in your browser.
+By default colors.css is output to the example folder, you can view the results by opening palegen.html in a browser.
 An example screenshot of that page is [here](https://github.com/adrinux/palegen/blob/master/example/screenshot-Palegen-ff3300.png).
 
 ## Installation
 
-The easiest way at present is using go get to download, compile and install:
+Using go get to download, compile and install will give your the very latest code:
 
 ```bash
 go get github.com/adrinux/palegen
 ```
 
-(At some point I should set up binary releases via github.)
+It's more sensible to check out a specific version and compile it yourself:
+
+```bash
+git clone https://github.com/adrinux/palegen.git
+cd palegen
+git checkout tags/0.2.0
+go build
+```
+
+And copy the resulting binary somewhere in your path (check it's executable).
+
+(At some point I should set up binary releases via github...)
 
 ## Flaws, Issues and other things of note
 
 1. Colour Names: For certain input colours the names of output colours can seem a little off. Red may be perceptually orange, yellow perceptually green. See issue #4
-2. HSL vs HCL colour space. HCL can produce better colour distribution but is not directly supported by CSS. HSL is used by Palx and Palegen follows that. For full discussion see issue #5
-3. Limited to hsl() CSS output. See #8
-4. Limited to hex input. See #9
+2. Limited to hsl() CSS output. See #8
