@@ -209,8 +209,15 @@ func main() {
 			fmt.Printf("Error: %v\n", err)
 		}
 
+		// empty line
+		_, err = f.WriteString("\n")
+		if err != nil {
+			fmt.Printf("Error: %v\n", err)
+		}
+
 		// Open preferes-color-scheme dark media query and nested root section
-		_, err = f.WriteString(`@media (prefers-color-scheme: dark) {
+		_, err = f.WriteString(`
+@media (prefers-color-scheme: dark) {
   :root {
 `)
 		if err != nil {
@@ -218,13 +225,13 @@ func main() {
 		}
 
 		// Flip the color tinted text black to white in darkmode
-		_, err = f.WriteString("  --textwhite: hsla(0, 100%, 0%, 0.9);\n")
+		_, err = f.WriteString("    --textwhite: hsla(0, 100%, 0%, 0.9);\n")
 		if err != nil {
 			fmt.Printf("Error: %v\n", err)
 		}
 
 		// Flip the color tinted text white to black in darkmode
-		_, err = f.WriteString("  --textblack: hsla(360, 100%, 100%, 0.9);\n")
+		_, err = f.WriteString("    --textblack: hsla(360, 100%, 100%, 0.9);\n")
 		if err != nil {
 			fmt.Printf("Error: %v\n", err)
 		}
@@ -237,7 +244,7 @@ func main() {
 
 		for i := range darkVariants {
 			h, s, l := colorful.Hcl(darkVariants[i].hu, darkVariants[i].ch, darkVariants[i].li).HSLuv()
-			_, err = fmt.Fprintf(f, "  --%s: hsla(%.2f, %.2f%%, %.2f%%, 1);\n", darkVariants[i].name, h, float64(s*100), float64(l*100))
+			_, err = fmt.Fprintf(f, "    --%s: hsla(%.2f, %.2f%%, %.2f%%, 1);\n", darkVariants[i].name, h, float64(s*100), float64(l*100))
 			if err != nil {
 				fmt.Printf("Error: %v\n", err)
 			}
