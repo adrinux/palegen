@@ -155,7 +155,7 @@ func main() {
 
 		// Write the input base color directly as css vars
 		// base as hsla
-		h, s, l := ic.Hsl()
+		h, s, l := ic.Clamped().Hsl()
 		_, err = fmt.Fprintf(f, "  --base: hsla(%.2f, %.2f%%, %.2f%%, 1);\n", h, float64(s*100), float64(l*100))
 		if err != nil {
 			fmt.Printf("Error: %v\n", err)
