@@ -367,7 +367,9 @@ func rotateHue(h float64, c float64, l float64) []nc {
 
 func grey(h float64, c float64, l float64) []nc {
 
-	nc := c / 12
+	// Doesn't need a seperate var at this point but I may make this
+	// configurable evenutally
+	nc := 0.05
 
 	for i := range clrs {
 		if clrs[i].name == "grey" {
