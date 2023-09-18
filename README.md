@@ -1,3 +1,6 @@
+# Deprecated
+The arrival of modern colour declarations in CSS (such as oklch) and the support of wider colour gamuts like P3 means the sort of automated palete generation Palegen was made for is nowmuch less useful.
+
 # Palegen
 
 CLI based automated CSS colour palette generator. (Pronounced "pal-ee-jen".)
